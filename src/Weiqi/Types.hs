@@ -11,7 +11,7 @@ data PieceInfo = PieceInfo Piece | Empty deriving (Eq, Show)
 
 data Piece = Piece { colour :: Colour, connected :: [(X, Y)] } deriving (Eq, Show)
 
-data Colour = Black | White deriving (Eq, Show)
+data Colour = Black | White deriving (Eq, Show, Read)
 
 type Qi = Int
 
