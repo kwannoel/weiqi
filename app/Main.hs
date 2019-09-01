@@ -14,7 +14,7 @@ handleInsert (Right board) = runWeiqi board
 runWeiqi :: Board -> IO ()
 runWeiqi board = do
   putStrLn $ renderBoard board
-  putStrLn "Enter your input in the form of: \"<y> <x> <colour>\""
+  putStrLn "Enter your input in the form of: \"<y> <x> <colour> (REMOVE|PLACE)\""
   input <- hGetLine stdin
   case length (words input) of
     3 -> let [y, x, colour] = words input

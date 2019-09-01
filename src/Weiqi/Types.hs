@@ -1,7 +1,12 @@
 module Weiqi.Types where
 
 import qualified Data.Map.Strict as M
+import Control.Monad.Trans.State
 
+type BoardState = State Board Representation
+
+type Error = String
+type Representation = String
 type Board = M.Map (X, Y) PieceInfo
 
 type X = Int

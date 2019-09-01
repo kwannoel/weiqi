@@ -5,6 +5,9 @@ import qualified Data.Map.Strict as M
 
 import Weiqi.Types
 
+insertPieceState :: (X, Y) -> Piece -> Either Error BoardState
+insertPieceState coord piece = undefined
+
 -- Unsafe inserting of pieces
 insertPieceAtCoord :: (X, Y) -> PieceInfo -> Board -> Board
 insertPieceAtCoord coord piece board = M.insert coord piece board
@@ -16,7 +19,8 @@ insertPieceAtCoord coord piece board = M.insert coord piece board
 
 -- Validating before proceeding with insertion of a piece
 -- Update board if required as well
-insertPiece :: (X, Y) -> Piece -> Board -> Either String Board
+
+insertPiece :: (X, Y) -> Piece -> Board -> Either Error Board
 insertPiece coord piece board
   | checkValid piece coord board = Right $ insertAndUpdate coord piece board
   | otherwise = Left $ "Invalid placement at: " ++ show coord ++ " " ++ show (colour piece)
