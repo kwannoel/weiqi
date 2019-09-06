@@ -2,11 +2,17 @@ module Weiqi.Dynamics where
 
 import Data.Foldable
 import qualified Data.Map.Strict as M
+import Control.Monad.Trans.State
+import Control.Monad.IO.Class
 
 import Weiqi.Types
 
-insertPieceState :: (X, Y) -> Piece -> Either Error BoardState
-insertPieceState coord piece = undefined
+placePiece :: (X, Y) -> Piece -> BoardState ()
+placePiece coord piece = do
+  board <- get
+  case insertPiece coord piece board of
+    Left err -> liftIO $ putStrLn err
+    Right updatedBoard -> put updatedBoard
 
 -- Unsafe inserting of pieces
 insertPieceAtCoord :: (X, Y) -> PieceInfo -> Board -> Board
@@ -92,13 +98,18 @@ checkValid piece coord board =
     _ -> False
 
 -- Remove pieces
+removePiece :: (X, Y) -> BoardState ()
+removePiece (x, y) = do
+  board <- get
+  put (removeCluster (x, y) board)
+
 removePieces :: [(X, Y)] -> Board -> Board
-removePieces coords board = foldl' (\board coord -> removeConnected coord board) board coords
+removePieces coords board = foldl' (\board coord -> removeSinglePiece coord board) board coords
 
-removeConnected :: (X, Y) -> Board -> Board
-removeConnected coord board = let Just (PieceInfo piece) = M.lookup coord board
-                                  connectedPieces = connected piece 
-                              in foldl' (flip removePiece) board connectedPieces
+removeCluster :: (X, Y) -> Board -> Board
+removeCluster coord board = let Just (PieceInfo piece) = M.lookup coord board
+                                connectedPieces = connected piece 
+                            in  removePieces connectedPieces board
 
-removePiece :: (X, Y) -> Board -> Board
-removePiece coord board = M.update (\_ -> Just Empty) coord board
+removeSinglePiece :: (X, Y) -> Board -> Board
+removeSinglePiece coord board = M.update (\_ -> Just Empty) coord board
