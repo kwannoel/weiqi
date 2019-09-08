@@ -19,7 +19,7 @@ sameColor coord piece board =
 
 -- Remove pieces
 removePieces :: [(X, Y)] -> Board -> Board
-removePieces coords board = foldl' (\board coord -> removeSinglePiece coord board) board coords
+removePieces coords board = foldl' (\board' coord -> removeSinglePiece coord board') board coords
 
 removeSinglePiece :: (X, Y) -> Board -> Board
 removeSinglePiece coord board = M.update (\_ -> Just Empty) coord board
@@ -40,5 +40,4 @@ keyValPair coord board = let Just val = M.lookup coord board
                          in  (coord, val)
 
 adjacentCoords :: (X, Y) -> [(X, Y)]
-adjacentCoords (x, y) = [(x + 1, y), (x - 1, y), (x, y + 1), (x + 1, y)]
-
+adjacentCoords (x, y) = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]

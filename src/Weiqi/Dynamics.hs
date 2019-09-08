@@ -32,9 +32,24 @@ insertPiece coord piece board
 insertAndUpdate :: (X, Y) -> Piece -> Board -> Board
 insertAndUpdate coord piece board = updatedBoard
   where intermediateBoard = insertPieceAtCoord coord piece board
-        updatedBoard = case checkFour [coord] piece board of
+        updatedBoard = case checkFour [coord] (opposite piece) board of
           Dead coords -> removePieces coords intermediateBoard
           Alive -> intermediateBoard
+
+checkSurrounding :: (X, Y) -> Piece -> Board -> Board
+checkSurrounding coord piece board = undefined --foldl' (\board coord -> undefined) undefined undefined
+
+handleSurrounding :: Board -> (X, Y) -> Piece -> Board
+handleSurrounding board coord piece =
+  case M.lookup coord board of
+    Just Empty -> board
+    Nothing -> board
+    Just val -> let newBoard | val == opposite piece = undefined
+                in newBoard
+
+opposite :: Piece -> Piece
+opposite Black = White
+opposite White = Black
 
 checkFour :: [(X, Y)] -> Piece -> Board -> Qi
 checkFour coord piece board = go [] (Right coord) piece board
@@ -45,11 +60,11 @@ checkFour coord piece board = go [] (Right coord) piece board
              sameOrEmpty
              piece
              board
-          where unCheckedCoords = filter (isChecked checked) (expand coords)
+          where unCheckedCoords = filter (isNotChecked checked) (expand coords)
                 emptyOrCoords = (hasEmpty piece board unCheckedCoords)
                 sameOrEmpty = case emptyOrCoords of
                   Left Empty -> Left Empty 
-                  Right ls   -> Right $ filter (isSame piece board) ls
+                  Right coords' -> Right $ filter (isSame piece board) coords'
 
 isSame :: Piece -> Board -> (X, Y) -> Bool
 isSame piece board coord =
@@ -57,8 +72,8 @@ isSame piece board coord =
     Just val -> val == piece
     _ -> False
 
-isChecked :: [(X, Y)] -> (X, Y) -> Bool
-isChecked checked = \x -> not $ elem x checked
+isNotChecked :: [(X, Y)] -> (X, Y) -> Bool
+isNotChecked checked = \x -> not $ elem x checked
 
 hasEmpty :: Piece -> Board -> [(X, Y)] -> Either Piece [(X, Y)]
 hasEmpty piece board coords | length (filter (isEmpty board) coords) == 0 = Right coords

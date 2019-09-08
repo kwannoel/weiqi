@@ -15,6 +15,6 @@ data Piece = Black | White | Empty deriving (Eq, Show, Read)
 
 data Action = Remove | Place deriving (Eq, Show, Read)
 
-data Qi = Alive | Dead [(X, Y)] deriving Eq
+data Qi = Alive | Dead [(X, Y)] deriving (Eq, Show)
 
 type Valid = Bool
