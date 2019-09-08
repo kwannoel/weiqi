@@ -3,7 +3,7 @@ module Weiqi.Board where
 import Data.Foldable
 import qualified Data.Map.Strict as M
 
-import Weiqi.Dynamics
+import Weiqi.Dynamics.Internal (insertPieceAtCoord)
 import Weiqi.Types
 
 -- An empty row of length x
