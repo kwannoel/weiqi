@@ -6,13 +6,13 @@ import Data.Maybe
 import Weiqi.Validate
 import Weiqi.Types
 
-parse :: String -> Maybe (X, Y, Piece)
+parse :: String -> Maybe (Y, X, Piece)
 parse input | verify input = Just . convert . words $ input
             | otherwise = Nothing
 
-convert :: [String] -> (X, Y, Piece)
-convert [x, y, piece] = (
-  read x :: X,
+convert :: [String] -> (Y, X, Piece)
+convert [y, x, piece] = (
   read y :: Y,
+  read x :: X,
   read piece :: Piece
   )

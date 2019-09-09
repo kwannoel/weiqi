@@ -21,12 +21,12 @@ runWeiqi :: BoardState ()
 runWeiqi = do
   board <- get
   liftIO . putStrLn $ renderBoard board
-  liftIO . putStrLn $ "Enter your input in the form of: \"<y> <x> <colour>\""
+  liftIO . putStrLn $ "Enter your input in the form of: \"<x> <y> <colour>\""
   input <- liftIO getLine
   case (parse input) of
     Just parsedInput -> execute parsedInput
     Nothing -> (liftIO . putStrLn $ "Invalid Input")
   runWeiqi
 
-execute :: (X, Y, Piece) -> BoardState ()
-execute (x, y, piece) = placePiece (x, y) $ piece
+execute :: (Y, X, Piece) -> BoardState ()
+execute (y, x, piece) = placePiece (x, y) $ piece
