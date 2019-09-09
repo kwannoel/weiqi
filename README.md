@@ -1,8 +1,12 @@
-# weiqi
+# weiqi tui
 
-## Developer notes:
+## Features:
+- Seed removal
+- 9x9 Board
 
-Default behaviors:
-- After each attempted state update:
-  - if error -> print error message, render original state
-  - if no error -> update state, render state
+## Planned features:
+- GUI
+- variable board sizes
+- Undoing
+- Add numbering for tui
+- saving games
