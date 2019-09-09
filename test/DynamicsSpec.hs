@@ -55,7 +55,32 @@ spec = do
       board <- noQi
       M.lookup (5, 4) board `shouldBe` Just Black
       M.lookup (4, 4) board `shouldBe` Just White
-      checkFour [(4, 4)] White board `shouldBe` Dead [(4, 4)]      
+      checkQi [(4, 4)] White board `shouldBe` Dead [(4, 4)]      
+
+    it "Handles a piece of the opposite colour" $ do
+      board <- noQi 
+      let newBoard = handlePiece board (4, 4) Black 
+      M.lookup (4, 4) newBoard `shouldBe` Just Empty
+      M.lookup (4, 3) newBoard `shouldBe` Just Black
+    it "Handles multiple pieces of the opposite colour" $ do
+      board <- noQiBig
+      let newBoard = handlePiece board (2, 2) White
+      M.lookup (2, 2) newBoard `shouldBe` Just Empty
+      M.lookup (2, 3) newBoard `shouldBe` Just Empty
+      M.lookup (3, 2) newBoard `shouldBe` Just Empty
+      M.lookup (3, 3) newBoard `shouldBe` Just Empty
+
+      M.lookup (1, 2) newBoard `shouldBe` Just White
+      M.lookup (1, 3) newBoard `shouldBe` Just White
+
+      M.lookup (2, 1) newBoard `shouldBe` Just White
+      M.lookup (3, 1) newBoard `shouldBe` Just White
+
+      M.lookup (2, 4) newBoard `shouldBe` Just White
+      M.lookup (3, 4) newBoard `shouldBe` Just White
+
+      M.lookup (4, 2) newBoard `shouldBe` Just White
+      M.lookup (4, 3) newBoard `shouldBe` Just White
 
 flowerBoard :: IO Board
 flowerBoard =
@@ -76,3 +101,23 @@ noQi =
     placePiece (5, 4) Black
     board <- get
     put $ insertPieceAtCoord (4, 4) White board
+
+noQiBig :: IO Board
+noQiBig =
+  flip execStateT board9x9 $ do
+    placePiece (2, 2) Black
+    placePiece (2, 3) Black
+    placePiece (3, 2) Black
+    placePiece (3, 3) Black
+
+    placePiece (1, 2) White
+    placePiece (1, 3) White
+
+    placePiece (2, 1) White
+    placePiece (3, 1) White
+
+    placePiece (2, 4) White
+    placePiece (3, 4) White
+
+    placePiece (4, 2) White
+    placePiece (4, 3) White
